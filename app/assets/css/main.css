@@ -1,0 +1,284 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* ---------------------------------------------------------------------------
+   TuneRoom design tokens
+   Dark theme only. One warm amber accent on a near-black neutral base.
+   --------------------------------------------------------------------------- */
+
+@theme static {
+  /* Brand (amber) — mapped to `primary` in app.config.ts. */
+  --color-brand-50: #fffaf0;
+  --color-brand-100: #fef0d2;
+  --color-brand-200: #fde0a3;
+  --color-brand-300: #facb6d;
+  --color-brand-400: #f6b445;
+  --color-brand-500: #efa22b;
+  --color-brand-600: #d4831c;
+  --color-brand-700: #ac6218;
+  --color-brand-800: #864b17;
+  --color-brand-900: #6b3b14;
+  --color-brand-950: #3d1f08;
+
+  /* Ink (neutral charcoal) — mapped to `neutral` in app.config.ts. */
+  --color-ink-50: #f6f6f7;
+  --color-ink-100: #e7e7e9;
+  --color-ink-200: #d2d2d6;
+  --color-ink-300: #b0b0b7;
+  --color-ink-400: #8a8a93;
+  --color-ink-500: #6e6e78;
+  --color-ink-600: #58585f;
+  --color-ink-700: #46464c;
+  --color-ink-800: #2b2b31;
+  --color-ink-900: #1b1b20;
+  --color-ink-950: #0b0b0e;
+
+  /* Semantic surfaces used across custom components. */
+  --color-base: #09090b;
+  --color-surface: #0f0f13;
+  --color-raised: #17171d;
+  --color-hairline: #23232b;
+  --color-hairline-soft: #1a1a20;
+  --color-chalk: #ededf0;
+  --color-mist: #9c9ca6;
+  --color-ash: #6b6b76;
+
+  --ui-radius: 0.5rem;
+
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --animate-eq-1: eq 1s ease-in-out infinite;
+  --animate-eq-2: eq 1.2s ease-in-out infinite 0.15s;
+  --animate-eq-3: eq 0.9s ease-in-out infinite 0.3s;
+  --animate-fade-up: fade-up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.2s ease-out both;
+  --animate-rise: rise 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-sheet-in: sheet-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-sheet-out: sheet-out 0.2s ease-in both;
+
+  @keyframes eq {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes sheet-out {
+    from {
+      transform: none;
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Nuxt UI reads these for every component. Overridden once, globally. */
+.dark {
+  --ui-bg: #0f0f13;
+  --ui-bg-muted: #141419;
+  --ui-bg-elevated: #191920;
+  --ui-bg-accented: #24242c;
+  --ui-bg-inverted: #f6f6f7;
+
+  --ui-border: #23232b;
+  --ui-border-muted: #1c1c22;
+  --ui-border-accented: #32323c;
+  --ui-border-inverted: #f6f6f7;
+
+  --ui-text: #e9e9ec;
+  --ui-text-muted: #9c9ca6;
+  --ui-text-dimmed: #6b6b76;
+  --ui-text-toned: #c6c6ce;
+  --ui-text-highlighted: #ffffff;
+  --ui-text-inverted: #0b0b0e;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  /*
+    Stacking scale — kept deliberately small:
+      30  sticky page headers
+      40  the fixed player dock (above page content, below dialogs)
+      50  the full-screen player
+    Dialogs, popovers and toasts are portalled to <body> *after* #__nuxt, which
+    Nuxt renders with `class="isolate"`. Because that isolates the app shell's
+    stacking context, portalled layers always paint above it without needing
+    arbitrary z-index values.
+  */
+
+  html {
+    background-color: var(--color-base);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-base);
+    color: var(--color-chalk);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-brand-400) 32%, transparent);
+    color: #fff;
+  }
+
+  /* Slim, unobtrusive scrollbars that match the dark surfaces. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2c2c35 transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: #2c2c35;
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #3a3a45;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility hide-spinner {
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+}
+
+/* Seek / volume slider: a thin track with an amber fill driven by --fill. */
+@utility slider {
+  --fill: 0%;
+  --slider-direction: to right;
+  position: relative;
+  width: 100%;
+  height: 16px;
+  border-radius: 999px;
+  background-image: linear-gradient(
+    var(--slider-direction),
+    var(--color-brand-400) 0 var(--fill),
+    #2e2e37 var(--fill) 100%
+  );
+
+  &:dir(rtl) {
+    --slider-direction: to left;
+  }
+  background-repeat: no-repeat;
+  background-size: 100% 4px;
+  background-position: center;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: #fff;
+    border: none;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  &::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: none;
+    border-radius: 999px;
+    background: #fff;
+    opacity: 0;
+  }
+  &:hover::-webkit-slider-thumb,
+  &:focus-visible::-webkit-slider-thumb,
+  &:active::-webkit-slider-thumb {
+    opacity: 1;
+  }
+  &:hover::-moz-range-thumb,
+  &:focus-visible::-moz-range-thumb {
+    opacity: 1;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-400);
+    outline-offset: 3px;
+  }
+}
+
+/* Room for the fixed player dock, plus the iOS home-indicator inset. Applied to
+   the app shell only while something is loaded, so pages never hide behind it. */
+@utility pb-dock {
+  padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+
+  @media (width >= 48rem) {
+    padding-bottom: 4.75rem;
+  }
+}
+
+/* Keeps timecodes and counters readable left-to-right inside RTL content. */
+@utility numeric {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
