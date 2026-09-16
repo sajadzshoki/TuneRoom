@@ -1,0 +1,47 @@
+{
+  "name": "tuneroom",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "TuneRoom \u2014 a shared music room where a group of people add and listen to music together.",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --host 0.0.0.0 --port 3000",
+    "generate": "nuxt generate",
+    "preview": "node .output/server/index.mjs",
+    "start": "node .output/server/index.mjs",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio",
+    "postbuild": "node scripts/postbuild.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@nuxt/ui": "^4.11.1",
+    "drizzle-orm": "^0.45.2",
+    "music-metadata": "^11.15.0",
+    "nuxt": "^4.5.2",
+    "pg": "^8.16.3",
+    "qrcode": "^1.5.4",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.80",
+    "@nuxt/eslint": "^1.17.0",
+    "@types/pg": "^8.15.6",
+    "@types/qrcode": "^1.5.6",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^10.10.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
